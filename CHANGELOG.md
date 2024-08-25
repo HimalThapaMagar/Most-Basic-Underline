@@ -1,4 +1,4 @@
-## 0.0.1
+## 1.0.0
 
 * Initial release with basic functionality.
   * Feature 1: Basic underline added

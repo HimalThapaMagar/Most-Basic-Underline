@@ -1,39 +1,77 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# UnderlineText Package
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+The `basic_underline` package provides a customizable Flutter widget that allows you to add animated underlines to text. You can choose between straight and squiggly underline animations, customize colors, and optionally add URL links to your text.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- **Straight Underline Animation:** A smooth, expanding line that animates from left to right.
+- **Squiggly Underline Animation:** An animated squiggly line that moves under the text.
+- **Customization:** Easily control text color, underline color, hover text color, animation duration, and underline thickness.
+- **Link Support:** Make text clickable with optional URL launching.
 
-## Getting started
+## Installation
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add `underline_text` to your `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  underline_text: ^1.0.0
+```
+and then run this to update the packages
+```
+flutter pub get
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
+Here's how to use the UnderlineText widget in your Flutter application:
 ```dart
-const like = 'sample';
+import 'package:flutter/material.dart';
+import 'package:underline_text/underline_text.dart'; // Import the package
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('UnderlineText Example')),
+        body: Center(
+          child: UnderlineText(
+            text: 'Click Me',
+            textColor: Colors.black,
+            underlineColor: Colors.blue,
+            hoverTextColor: Colors.blueAccent,
+            animationType: UnderlineAnimationType.squiggly,
+            animationDuration: Duration(milliseconds: 500),
+            underlineThickness: 3.0,
+            url: 'www.himalthapa1.com.np', // Optional URL
+          ),
+        ),
+      ),
+    );
+  }
+}
 ```
 
-## Additional information
+## Widget Parameters
+- **text (required)** : The Desired text to display to the user.
+- **textColor (optional)** : The desired color of the text or default color will be used if not provided by the developer.
+- **hoverColor (optional)** : The desired hover color of the text that will be shown to the user on mouse hover event or default color will be used if not provided by the developer.
+- **underlineColor (optional)** : The desired color of the underline that will be shown to the user on mouse hover event or default color will be used if not provided by the developer.
+- **animationType (optional)** : The type of underline animation. Options are **UnderlineAnimationType.straight** and **UnderlineAnimationType.squiggly**. Defaults to UnderlineAnimationType.straight.
+- **url(optional)** : The URL to open when the text is clicked. If null, the text will not be clickable.
+- **animationDuration(optional)** : The duration upon which the animation of the underline will be drawn under the text.
+- **underlineThickness(optional)** : The thickness of the underline. (tip : donot use too much thick underline especially on squiggly underline).
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## License
+This package is licensed under the MIT License. See the LICENSE file for more details.
+
+## Contributing
+Contributions are very much not only welcome but encouraged! Please open an issue or submit a pull request if you have suggestions or improvements. I would be happy to help you or collaborate with you on the issue or improvements to the code.
+
+## Contact
+For any questions or feedback, feel free to open an issue on the [GitHub repository](https://github.com/HimalThapaMagar/Most-Basic-Underline.git).Thank you!
