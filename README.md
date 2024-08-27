@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
 - **underlineThickness(optional)** : The thickness of the underline. (tip : donot use too much thick underline especially on squiggly underline).
 
 ## License
-This package is licensed under the MIT License. See the LICENSE file for more details.
+This package is licensed under the MIT License. See the [LICENSE](https://github.com/HimalThapaMagar/Most-Basic-Underline/blob/main/LICENSE) file for more details.
 
 ## Contributing
 Contributions are very much not only welcome but encouraged! Please open an issue or submit a pull request if you have suggestions or improvements. I would be happy to help you or collaborate with you on the issue or improvements to the code.
