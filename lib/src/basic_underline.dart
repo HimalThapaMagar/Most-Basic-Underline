@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 enum UnderlineAnimationType {
   straight,
   squiggly,
+  dotted,
 }
 
 class UnderlineText extends StatefulWidget {
@@ -15,6 +16,8 @@ class UnderlineText extends StatefulWidget {
   final UnderlineAnimationType animationType;
   final Duration animationDuration; // Optional duration
   final double underlineThickness;  // Optional underline thickness
+  final double dotRadius;           // Optional radius of each dot
+  final double dotSpacing;          // Optional spacing between dots
 
   const UnderlineText({
     super.key,
@@ -26,6 +29,8 @@ class UnderlineText extends StatefulWidget {
     this.animationType = UnderlineAnimationType.straight,
     this.animationDuration = const Duration(milliseconds: 300), // Default duration
     this.underlineThickness = 2.0, // Default underline thickness
+    this.dotRadius = 2.0,          // Default dot radius
+    this.dotSpacing = 4.0,         // Default dot spacing
   });
 
   @override
@@ -83,6 +88,8 @@ class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderS
     switch (widget.animationType) {
       case UnderlineAnimationType.squiggly:
         return _buildSquigglyUnderline();
+      case UnderlineAnimationType.dotted:
+        return _buildDottedUnderline();
       case UnderlineAnimationType.straight:
       default:
         return _buildStraightUnderline();
@@ -111,6 +118,23 @@ class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderS
             width: _widthAnimation.value * textWidth,
             color: widget.underlineColor,
             thickness: widget.underlineThickness,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDottedUnderline() {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: DottedUnderlinePainter(
+            width: _widthAnimation.value * textWidth,
+            color: widget.underlineColor,
+            thickness: widget.underlineThickness,
+            dotRadius: widget.dotRadius,
+            dotSpacing: widget.dotSpacing,
           ),
         );
       },
@@ -196,6 +220,41 @@ class SquigglyUnderlinePainter extends CustomPainter {
     }
 
     canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class DottedUnderlinePainter extends CustomPainter {
+  final double width;
+  final Color color;
+  final double thickness;
+  final double dotRadius;
+  final double dotSpacing;
+
+  DottedUnderlinePainter({
+    required this.width,
+    required this.color,
+    required this.thickness,
+    required this.dotRadius,
+    required this.dotSpacing,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (width <= 0) return;
+
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    double x = 0;
+
+    while (x < width) {
+      canvas.drawCircle(Offset(x, 0), dotRadius, paint);
+      x += dotRadius * 2 + dotSpacing; // Move to the next position for the next dot
+    }
   }
 
   @override

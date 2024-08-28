@@ -6,6 +6,7 @@ The `basic_underline` package provides a customizable Flutter widget that allows
 
 - **Straight Underline Animation:** A smooth, expanding line that animates from left to right.
 - **Squiggly Underline Animation:** An animated squiggly line that moves under the text.
+- **Dotted Underline Animation** An animated dottes line that moves under the text.
 - **Customization:** Easily control text color, underline color, hover text color, animation duration, and underline thickness.
 - **Link Support:** Make text clickable with optional URL launching.
 
@@ -15,7 +16,7 @@ Add `underline_text` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  underline_text: ^1.0.0
+  underline_text: ^1.2.0
 ```
 and then run this to update the packages
 ```
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
 - **url(optional)** : The URL to open when the text is clicked. If null, the text will not be clickable.
 - **animationDuration(optional)** : The duration upon which the animation of the underline will be drawn under the text.
 - **underlineThickness(optional)** : The thickness of the underline. (tip : donot use too much thick underline especially on squiggly underline).
+- **dotRadius(optional)** : The radius for the dotted underline when used.
+- **dotSpacing(optional)** : The spacing for each dots in the dotted underline when used. 
 
 ## License
 This package is licensed under the MIT License. See the [LICENSE](https://github.com/HimalThapaMagar/Most-Basic-Underline/blob/main/LICENSE) file for more details.
