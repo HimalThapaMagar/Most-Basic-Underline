@@ -5,6 +5,7 @@ enum UnderlineAnimationType {
   straight,
   squiggly,
   dotted,
+  bouncingLightRay,
 }
 
 class UnderlineText extends StatefulWidget {
@@ -14,10 +15,10 @@ class UnderlineText extends StatefulWidget {
   final Color hoverTextColor;
   final String? url;
   final UnderlineAnimationType animationType;
-  final Duration animationDuration; // Optional duration
-  final double underlineThickness;  // Optional underline thickness
-  final double dotRadius;           // Optional radius of each dot
-  final double dotSpacing;          // Optional spacing between dots
+  final Duration animationDuration;
+  final double underlineThickness;
+  final double dotRadius;
+  final double dotSpacing;
 
   const UnderlineText({
     super.key,
@@ -27,17 +28,18 @@ class UnderlineText extends StatefulWidget {
     this.hoverTextColor = Colors.blue,
     this.url,
     this.animationType = UnderlineAnimationType.straight,
-    this.animationDuration = const Duration(milliseconds: 300), // Default duration
-    this.underlineThickness = 2.0, // Default underline thickness
-    this.dotRadius = 2.0,          // Default dot radius
-    this.dotSpacing = 4.0,         // Default dot spacing
+    this.animationDuration = const Duration(milliseconds: 300),
+    this.underlineThickness = 2.0,
+    this.dotRadius = 2.0, // Default dot radius
+    this.dotSpacing = 4.0, // Default dot spacing
   });
 
   @override
   UnderlineTextState createState() => UnderlineTextState();
 }
 
-class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderStateMixin {
+class UnderlineTextState extends State<UnderlineText>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _widthAnimation;
   bool isHovered = false;
@@ -90,6 +92,8 @@ class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderS
         return _buildSquigglyUnderline();
       case UnderlineAnimationType.dotted:
         return _buildDottedUnderline();
+      case UnderlineAnimationType.bouncingLightRay:
+        return _buildBouncingLightRayUnderline();
       case UnderlineAnimationType.straight:
       default:
         return _buildStraightUnderline();
@@ -141,10 +145,27 @@ class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderS
     );
   }
 
+  Widget _buildBouncingLightRayUnderline() {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: BouncingLightRayPainter(
+            width: _widthAnimation.value * textWidth,
+            color: widget.underlineColor,
+            thickness: widget.underlineThickness,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: widget.url != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: widget.url != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       onEnter: (_) {
         setState(() {
           isHovered = true;
@@ -172,7 +193,7 @@ class UnderlineTextState extends State<UnderlineText> with SingleTickerProviderS
             Positioned(
               left: 0,
               bottom: 0,
-              child: _buildUnderline(), // Build underline based on type
+              child: _buildUnderline(),
             ),
           ],
         ),
@@ -194,7 +215,7 @@ class SquigglyUnderlinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (width <= 0) return; // Avoid drawing if width is 0
+    if (width <= 0) return;
 
     final paint = Paint()
       ..color = color
@@ -216,7 +237,7 @@ class SquigglyUnderlinePainter extends CustomPainter {
     final remainingWidth = width - x;
     if (remainingWidth > 0) {
       path.relativeQuadraticBezierTo(
-        remainingWidth / 2, -amplitude, remainingWidth, 0);
+          remainingWidth / 2, -amplitude, remainingWidth, 0);
     }
 
     canvas.drawPath(path, paint);
@@ -253,8 +274,54 @@ class DottedUnderlinePainter extends CustomPainter {
 
     while (x < width) {
       canvas.drawCircle(Offset(x, 0), dotRadius, paint);
-      x += dotRadius * 2 + dotSpacing; // Move to the next position for the next dot
+      x += dotRadius * 2 + dotSpacing;
     }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class BouncingLightRayPainter extends CustomPainter {
+  final double width;
+  final Color color;
+  final double thickness;
+
+  BouncingLightRayPainter({
+    required this.width,
+    required this.color,
+    required this.thickness,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (width <= 0) return;
+
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = thickness
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+    const double amplitude = 10.0;
+    const double wavelength = 20.0;
+    double x = 0;
+
+    while (x + wavelength <= width) {
+      path.moveTo(x, 0);
+      path.lineTo(x + wavelength / 2, amplitude);
+      path.lineTo(x + wavelength, 0);
+      x += wavelength;
+    }
+
+    final remainingWidth = width - x;
+    if (remainingWidth > 0) {
+      path.moveTo(x, 0);
+      path.lineTo(x + remainingWidth / 2, amplitude);
+      path.lineTo(x + remainingWidth, 0);
+    }
+
+    canvas.drawPath(path, paint);
   }
 
   @override

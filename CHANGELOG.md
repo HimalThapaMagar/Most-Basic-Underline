@@ -1,6 +1,11 @@
+## 1.3.0
+
+* Bouncing light Ray animation added.
+
+
 ## 1.2.0
 
-* Dotted animation added
+* Dotted animation added.
   * Feature 1: Dotted underline animated is added.
   * Feature 2: dotRadius(optional) new parameter added.
   * Feature 3: dotSpace(optional) new parameter added.
