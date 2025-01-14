@@ -1,3 +1,8 @@
+## 1.4.0
+
+* Rainbow Glow Effect animation added.
+  * Tip : Use a longer animationDuration for the pleasing effect on this effect.
+
 ## 1.3.0
 
 * Bouncing light Ray animation added.

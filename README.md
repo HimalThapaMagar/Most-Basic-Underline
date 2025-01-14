@@ -8,6 +8,7 @@ The `basic_underline` package provides a customizable Flutter widget that allows
 - **Squiggly Underline Animation:** An animated squiggly line that moves under the text.
 - **Dotted Underline Animation** An animated dottes line that moves under the text.
 - **Bouncing Light Ray Underline Animation** A Ray of light that movees under the text.
+- **RainBow Glow Animation** A colorful rainbow that transistions from left to right under the text.
 - **Customization:** Easily control text color, underline color, hover text color, animation duration, and underline thickness.
 - **Link Support:** Make text clickable with optional URL launching.
 
@@ -17,7 +18,7 @@ Add `underline_text` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  underline_text: ^1.3.0
+  underline_text: ^1.4.0
 ```
 and then run this to update the packages
 ```

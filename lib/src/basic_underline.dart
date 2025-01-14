@@ -6,6 +6,7 @@ enum UnderlineAnimationType {
   squiggly,
   dotted,
   bouncingLightRay,
+  rainbowGlow,
 }
 
 class UnderlineText extends StatefulWidget {
@@ -94,6 +95,8 @@ class UnderlineTextState extends State<UnderlineText>
         return _buildDottedUnderline();
       case UnderlineAnimationType.bouncingLightRay:
         return _buildBouncingLightRayUnderline();
+      case UnderlineAnimationType.rainbowGlow:
+        return _buildRainbowGlowUnderline();
       case UnderlineAnimationType.straight:
       default:
         return _buildStraightUnderline();
@@ -160,6 +163,21 @@ class UnderlineTextState extends State<UnderlineText>
     );
   }
 
+  Widget _buildRainbowGlowUnderline() {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: RainbowGlowPainter(
+            width: isHovered ? textWidth : _widthAnimation.value * textWidth,
+            thickness: widget.underlineThickness,
+            animationValue: _controller.value,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -169,13 +187,22 @@ class UnderlineTextState extends State<UnderlineText>
       onEnter: (_) {
         setState(() {
           isHovered = true;
-          _controller.forward();
+          if (widget.animationType == UnderlineAnimationType.rainbowGlow) {
+            _controller.repeat(); // Makes the animation loop continuously
+          } else {
+            _controller.forward();
+          }
         });
       },
       onExit: (_) {
         setState(() {
           isHovered = false;
-          _controller.reverse();
+          if (widget.animationType == UnderlineAnimationType.rainbowGlow) {
+            _controller.stop();
+            _controller.reset();
+          } else {
+            _controller.reverse();
+          }
         });
       },
       child: GestureDetector(
@@ -322,6 +349,58 @@ class BouncingLightRayPainter extends CustomPainter {
     }
 
     canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class RainbowGlowPainter extends CustomPainter {
+  final double width;
+  final double thickness;
+  final double animationValue;
+
+  RainbowGlowPainter({
+    required this.width,
+    required this.thickness,
+    required this.animationValue,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (width <= 0) return;
+
+    final Rect scrollRect = Rect.fromLTWH(
+      -width + (2 * width * animationValue),
+      0,
+      2 * width,
+      thickness,
+    );
+
+    final List<Color> rainbowColors = [
+      Colors.red,
+      Colors.orange,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.indigo,
+      Colors.purple,
+      Colors.red, // adding red here to smmoth the transition...
+    ];
+
+    final gradient = LinearGradient(
+      colors: rainbowColors,
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
+
+    final Rect drawRect = Rect.fromLTWH(0, 0, width, thickness);
+
+    final paint = Paint()
+      ..shader = gradient.createShader(scrollRect)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRect(drawRect, paint);
   }
 
   @override
