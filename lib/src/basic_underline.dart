@@ -68,7 +68,7 @@ class UnderlineTextState extends State<UnderlineText>
   void _calculateTextWidth() {
     // Calculate text width using the provided textStyle or default style
     final TextStyle effectiveStyle = _getEffectiveTextStyle(false);
-    
+
     final textPainter = TextPainter(
       text: TextSpan(text: widget.text, style: effectiveStyle),
       maxLines: 1,
@@ -82,27 +82,33 @@ class UnderlineTextState extends State<UnderlineText>
 
   // Get the effective TextStyle by merging default and user-provided styles
   TextStyle _getEffectiveTextStyle(bool isHovering) {
-    final Color textColor = isHovering ? widget.hoverTextColor : widget.textColor;
-    
+    final Color textColor =
+        isHovering ? widget.hoverTextColor : widget.textColor;
+
     // Start with default style or empty style
     final TextStyle defaultStyle = TextStyle(
       fontSize: 20,
       color: textColor,
     );
-    
+
     // If user provided a textStyle, merge it with our default/hover color
     if (widget.textStyle != null) {
       return widget.textStyle!.copyWith(
         color: widget.textStyle!.color ?? textColor,
       );
     }
-    
+
     return defaultStyle;
   }
 
   Future<void> _launchUrl() async {
-    if (widget.url != null && await canLaunchUrl(widget.url! as Uri)) {
-      await launchUrl(widget.url! as Uri);
+    if (widget.url != null) {
+      final Uri uri = Uri.parse(widget.url!);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        debugPrint('Could not launch ${widget.url}');
+      }
     }
   }
 
@@ -123,7 +129,7 @@ class UnderlineTextState extends State<UnderlineText>
       case UnderlineAnimationType.rainbowGlow:
         return _buildRainbowGlowUnderline();
       case UnderlineAnimationType.straight:
-      return _buildStraightUnderline();
+        return _buildStraightUnderline();
     }
   }
 
@@ -206,7 +212,7 @@ class UnderlineTextState extends State<UnderlineText>
   Widget build(BuildContext context) {
     // Get the effective text style based on hover state
     final TextStyle effectiveStyle = _getEffectiveTextStyle(isHovered);
-    
+
     return MouseRegion(
       cursor: widget.url != null
           ? SystemMouseCursors.click

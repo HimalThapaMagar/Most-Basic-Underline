@@ -1,3 +1,8 @@
+## 1.5.1
+
+* Fixed the bug for not opening the URL when not clicked.
+
+
 ## 1.5.0
 
 * Support for the custom TextStyle is added.

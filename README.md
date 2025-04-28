@@ -19,7 +19,7 @@ Add `underline_text` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  underline_text: ^1.5.0
+  underline_text: ^1.5.1
 ```
 and then run this to update the packages
 ```
