@@ -11,6 +11,7 @@ The `basic_underline` package provides a customizable Flutter widget that allows
 - **RainBow Glow Animation** A colorful rainbow that transistions from left to right under the text.
 - **Customization:** Easily control text color, underline color, hover text color, animation duration, and underline thickness.
 - **Link Support:** Make text clickable with optional URL launching.
+- **Custom TextStyle Support:** Custom textstyle support has been added into the basic underline.
 
 ## Installation
 
@@ -18,7 +19,7 @@ Add `underline_text` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  underline_text: ^1.4.0
+  underline_text: ^1.5.0
 ```
 and then run this to update the packages
 ```
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
 - **underlineThickness(optional)** : The thickness of the underline. (tip : donot use too much thick underline especially on squiggly underline).
 - **dotRadius(optional)** : The radius for the dotted underline when used.
 - **dotSpacing(optional)** : The spacing for each dots in the dotted underline when used. 
+- **textStyle(optional)** : The custom textStyle for the text that is going to be shown to the user. 
 
 ## License
 This package is licensed under the MIT License. See the [LICENSE](https://github.com/HimalThapaMagar/Most-Basic-Underline/blob/main/LICENSE) file for more details.

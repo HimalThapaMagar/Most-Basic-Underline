@@ -1,3 +1,9 @@
+## 1.5.0
+
+* Support for the custom TextStyle is added.
+  * Tip : Use simpler customization to meke it look good or I dunno GO BOLD.
+
+
 ## 1.4.0
 
 * Rainbow Glow Effect animation added.

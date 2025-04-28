@@ -20,6 +20,7 @@ class UnderlineText extends StatefulWidget {
   final double underlineThickness;
   final double dotRadius;
   final double dotSpacing;
+  final TextStyle? textStyle; // Added textStyle parameter
 
   const UnderlineText({
     super.key,
@@ -31,8 +32,9 @@ class UnderlineText extends StatefulWidget {
     this.animationType = UnderlineAnimationType.straight,
     this.animationDuration = const Duration(milliseconds: 300),
     this.underlineThickness = 2.0,
-    this.dotRadius = 2.0, // Default dot radius
-    this.dotSpacing = 4.0, // Default dot spacing
+    this.dotRadius = 2.0,
+    this.dotSpacing = 4.0,
+    this.textStyle, // Added to constructor
   });
 
   @override
@@ -64,8 +66,11 @@ class UnderlineTextState extends State<UnderlineText>
   }
 
   void _calculateTextWidth() {
+    // Calculate text width using the provided textStyle or default style
+    final TextStyle effectiveStyle = _getEffectiveTextStyle(false);
+    
     final textPainter = TextPainter(
-      text: TextSpan(text: widget.text, style: const TextStyle(fontSize: 20)),
+      text: TextSpan(text: widget.text, style: effectiveStyle),
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
@@ -73,6 +78,26 @@ class UnderlineTextState extends State<UnderlineText>
     setState(() {
       textWidth = textPainter.size.width;
     });
+  }
+
+  // Get the effective TextStyle by merging default and user-provided styles
+  TextStyle _getEffectiveTextStyle(bool isHovering) {
+    final Color textColor = isHovering ? widget.hoverTextColor : widget.textColor;
+    
+    // Start with default style or empty style
+    final TextStyle defaultStyle = TextStyle(
+      fontSize: 20,
+      color: textColor,
+    );
+    
+    // If user provided a textStyle, merge it with our default/hover color
+    if (widget.textStyle != null) {
+      return widget.textStyle!.copyWith(
+        color: widget.textStyle!.color ?? textColor,
+      );
+    }
+    
+    return defaultStyle;
   }
 
   Future<void> _launchUrl() async {
@@ -98,8 +123,7 @@ class UnderlineTextState extends State<UnderlineText>
       case UnderlineAnimationType.rainbowGlow:
         return _buildRainbowGlowUnderline();
       case UnderlineAnimationType.straight:
-      default:
-        return _buildStraightUnderline();
+      return _buildStraightUnderline();
     }
   }
 
@@ -180,6 +204,9 @@ class UnderlineTextState extends State<UnderlineText>
 
   @override
   Widget build(BuildContext context) {
+    // Get the effective text style based on hover state
+    final TextStyle effectiveStyle = _getEffectiveTextStyle(isHovered);
+    
     return MouseRegion(
       cursor: widget.url != null
           ? SystemMouseCursors.click
@@ -212,10 +239,7 @@ class UnderlineTextState extends State<UnderlineText>
           children: [
             Text(
               widget.text,
-              style: TextStyle(
-                fontSize: 20,
-                color: isHovered ? widget.hoverTextColor : widget.textColor,
-              ),
+              style: effectiveStyle,
             ),
             Positioned(
               left: 0,
@@ -385,7 +409,7 @@ class RainbowGlowPainter extends CustomPainter {
       Colors.blue,
       Colors.indigo,
       Colors.purple,
-      Colors.red, // adding red here to smmoth the transition...
+      Colors.red, // adding red here to smooth the transition...
     ];
 
     final gradient = LinearGradient(
